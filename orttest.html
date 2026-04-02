@@ -1,137 +1,89 @@
 <!DOCTYPE html>
-<html lang="ky">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ЖРТ Тест</title>
-
+<title></title>
 <style>
 body {
-  font-family: Arial, sans-serif;
   text-align: center;
-  background: #f0f2f5;
-  margin: 0;
-  padding: 0;
+  font-family: Arial;
+  background: #f0f0f0;
 }
-
-.container {
-  max-width: 400px;
-  margin: 50px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-h1, h2 {
-  color: #333;
-}
-
 button {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 8px;
-  background: #4CAF50;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #45a049;
+  padding: 10px;
+  margin: 5px;
 }
 </style>
-
 </head>
 <body>
+<h2>ЖРТ Математика Тест</h2>
+<div id="start">
+<button onclick="startTest()">Баштоо</button>
+</div>
 
-<div class="container">
+<div id="quiz" style="display:none;">
+<p id="question"></p>
+<button onclick="checkAnswer(0)"></button>
+<button onclick="checkAnswer(1)"></button>
+<button onclick="checkAnswer(2)"></button>
+</div>
 
-  <!-- Башкы бет -->
-  <div id="start">
-    <h1>ЖРТ тестине даярдануу</h1>
-    <p>Алдын ала сыноо тиркемеси</p>
-    <button onclick="startTest()">Баштоо</button>
-  </div>
-
-  <!-- Тест -->
-  <div id="quiz" style="display:none;">
-    <h2 id="question"></h2>
-    <div id="answers"></div>
-  </div>
-
-  <!-- Жыйынтык -->
-  <div id="result" style="display:none;">
-    <h2 id="score"></h2>
-    <button onclick="restart()">Кайра баштоо</button>
-  </div>
-
+<div id="result" style="display:none;">
+<p id="score"></p>
+<button onclick="restart()">Кайра баштоо</button>
 </div>
 
 <script>
-let questions = [
-  {
-    question: "2 + 2 = ?",
-    answers: ["3", "4", "5"],
-    correct: 1
-  },
-  {
-    question: "Кыргызстандын борбору кайсы?",
-    answers: ["Ош", "Бишкек", "Нарын"],
-    correct: 1
-  },
-  {
-    question: "5 * 3 = ?",
-    answers: ["15", "10", "8"],
-    correct: 0
-  }
+var questions = [
+  ["2 + 3 = ?", ["4","5","6"], 1],
+  ["7 - 4 = ?", ["2","3","4"], 1],
+  ["5 * 2 = ?", ["10","12","8"], 0],
+  ["12 / 4 = ?", ["2","3","4"], 1],
+  ["9 + 6 = ?", ["14","15","16"], 1],
+  ["8 - 3 = ?", ["4","5","6"], 1],
+  ["3 * 3 = ?", ["6","9","12"], 1],
+  ["16 / 2 = ?", ["6","8","10"], 1],
+  ["7 + 5 = ?", ["11","12","13"], 1],
+  ["10 - 7 = ?", ["2","3","4"], 1]
 ];
 
-let current = 0;
-let score = 0;
+var current = 0;
+var score = 0;
 
-function startTest() {
+function startTest(){
   document.getElementById("start").style.display = "none";
   document.getElementById("quiz").style.display = "block";
   showQuestion();
 }
 
-function showQuestion() {
-  let q = questions[current];
-  document.getElementById("question").innerText = q.question;
-
-  let answersHTML = "";
-  q.answers.forEach((ans, index) => {
-    answersHTML += `<button onclick="answer(${index})">${ans}</button>`;
-  });
-
-  document.getElementById("answers").innerHTML = answersHTML;
+function showQuestion(){
+  document.getElementById("question").innerHTML = questions[current][0];
+  var answers = questions[current][1];
+  var buttons = document.getElementsByTagName("button");
+  buttons[1].innerHTML = answers[0];
+  buttons[2].innerHTML = answers[1];
+  buttons[3].innerHTML = answers[2];
 }
 
-function answer(index) {
-  if (index === questions[current].correct) {
-    score++;
+function checkAnswer(i){
+  if(i == questions[current][2]){
+    score = score + 1;
   }
-
-  current++;
-
-  if (current < questions.length) {
+  current = current + 1;
+  if(current < questions.length){
     showQuestion();
   } else {
-    showResult();
+    finishTest();
   }
 }
 
-function showResult() {
+function finishTest(){
   document.getElementById("quiz").style.display = "none";
   document.getElementById("result").style.display = "block";
-  document.getElementById("score").innerText =
-    "Сенин жыйынтык: " + score + " / " + questions.length;
+  document.getElementById("score").innerHTML =
+    "Жыйынтык: " + score + " / " + questions.length;
 }
 
-function restart() {
+function restart(){
   current = 0;
   score = 0;
   document.getElementById("result").style.display = "none";
